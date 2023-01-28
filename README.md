@@ -28,10 +28,10 @@ Tuân theo quy tắc đơn giản sau:
      xxxxx      *        *                *        *        *
     xxxxxxx     *        *             xxxxxxx    xxx     xxxxx
 ----------------------------------  -----------------------------------
--Hành động: 
-    Lấy từ : => Input Number => 1
-    Chuyển sang: 3
-    Gửi thông tin trả về kết quả của hành động
-    --Refesh Display--
-    => Continue lặp lại từ mục hành động
-    ....
+	Hành động: 
+		Lấy từ : => Input Number => 1
+    		Chuyển sang: 3
+    		Gửi thông tin trả về kết quả của hành động
+    		--Refesh Display--
+    		=> Continue lặp lại từ mục hành động
+    	....
