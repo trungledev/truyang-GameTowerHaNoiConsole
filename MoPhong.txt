@@ -1,0 +1,80 @@
+-Đề bài:
+    Tháp Hà Nội
+        Tháp Hà Nội là một bài toán toán học cơ bản để ví dụ về ý nghĩa của đệ quy.
+        Trong bài toán này, chúng ta có ba cột (A, B và C) và N đĩa.
+        Ban đầu, tất cả các đĩa được xếp chồng lên nhau theo giá trị giảm dần của đường kính, tức là đĩa nhỏ nhất được đặt trên cùng và chúng nằm trên thanh A.
+        Mục tiêu của bài toán đó là tìm cách di chuyển toàn bộ chồng đĩa sang một thanh khác (ở đây được coi là C) sử dụng thanh trung gian B, tuân theo quy tắc đơn giản sau:
+
+        Mỗi lần chỉ có thể di chuyển một đĩa.
+        Mỗi lần di chuyển sẽ bao gồm việc lấy đĩa trên cùng từ một trong các ngăn xếp và đặt nó lên trên một ngăn xếp khác, tức là chỉ có thể di chuyển một đĩa nếu nó là đĩa trên cùng trong một ngăn xếp.
+        Không được đặt đĩa to trên một đĩa nhỏ hơn.
+        Hãy viết chương trình sử dụng đệ quy in ra các bước dịch chuyển của các đĩa theo quy tắc sao cho ta có thể chuyển đĩa từ A sang C theo yêu cầu trên.
+
+    Một số quy định về lưu trữ và thứ tự:
+        Một cọc sẽ lưu giá trị theo tỷ lệ nghịch với index(chỉ mục) của phần tử
+        Vd: Với cột 1 mặc định chứa các đĩa: [disk3,disk2,disk1] với disk3 là ở đáy và disk1 ở trên đầu
+    Chú thích tiếng anh:
+        Disk : Đĩa
+        Tower : Cọc
+        LeftMargin : Lề trái
+    Giới hạn số đĩa trong khoảng lớn hơn [3  5]
+
+-Hiển thị minh họa:
+      *        *        *                *        *        * 
+      *        *        *                *        *        *
+     xxx       *        *        =>      *        *        *
+    xxxxx      *        *                *        *        *
+   xxxxxxx     *        *             xxxxxxx    xxx     xxxxx
+----------------------------------  -----------------------------------
+-Hành động: 
+    Lấy từ : => Input Number => 1
+    Chuyển sang: 3
+    Gửi thông tin trả về kết quả của hành động
+    --Refesh Display--
+    => Continue lặp lại từ mục hành động
+    ....
+
++ Trình tự sử dụng :
+    1,Nhập số đĩa 
+        1.1 Lấy dữ liệu từ đầu vào người dùng
+        1.2 Xác thực dữ liệu 
+            1.2.1 Nếu đúng trả vể kiểu: boolean giá trị: true
+            1.2.2 Lặp lại 1.1 việc yêu cầu nhập dữ liệu cho đến khi nhận được giá trị phù hợp
+        1.3 Nếu trả về true => Lưu số đĩa vào đối tượng
+    2,Tạo hiển thị với số đĩa và cọc mang giá trị mắc định được thiết lập sẵn
+        2.2 Khởi tạo các giá trị mặc định cho các đối tượng:
+            2.2.1 Với Đĩa : Số Đĩa mang các giá trị, đại diện cho kích thước đĩa tăng dần cho đến số đĩa tối đa
+            2.2.1 Với Cọc mang độ rộng của kho lưu trữ bao gồm thân cọc hoặc đĩa
+        2.3 Vì in hiển thị theo chiều ngang nên mọi dữ liệu được gán theo i,
+            2.3.1 Bao gồm :
+                + Lề trái + thân cọc/ đĩa, với mỗi lần là một cọc nên cần 3 lần chạy qua từng cọc
+            2.3.2 Tính toán lề trái và thành phần trong cột
+                + Max(Margin)  = Max value of (ValueDisk[]) + 1
+                + Margin = Max(Margin) - ValueDisk
+            2.3.3 In đường viền dưới sử dụng ký tự "-" gạch ngang làm đại diện
+                + Tính số "-" được tạo = 3 x Max(LeftMargin)
+    3, Hành động của người dùng
+        3.1 Các hành động có thể tương tác:
+            3.1.1 Chuyển đĩa sang các cọc phù hợp(đk đĩa phải nằm trên đĩa lớn hơn)
+            3.1.2 Reset khôi phục lại đĩa về ban đầu
+            3.1.3 Thay đổi số đĩa
+            3.1.4 Hiển thị lời giải
+            3.1.4 Thoát trò chơi
+    4, Thiết lập luật chơi
+        4.1 Thứ tự đĩa
+        4.2 Quy tắc nằm trên nhau
+        
++ Chú thích hiển thị:
+    -"*" dấu hoa thị đại diện cho phần thân của cọc 
+    -"x" chữ x thường đại diện cho một phần của đĩa, số lượng x = ValueDisk 
+
++ 1 = xxx = 3x, 2 = xxxxx = 5x, 3 = xxxxxxx = 7x 
+    => công thức tạo Disk numberX = ValueDisk * 2 + 1
+
++ Max(LeftMargin)  = Max value of (ValueDisk[]) 
++ LeftMargin = Max(LeftMargin) - ValueDisk
+
++ Cách thức in hiển thị : in từng dòng một 
+    -In khoảng trắng (LeftMargin (lần)) + In khoảng trắng (LeftMargin (lần)) + "*" / "x" + khoảng giữa 2 cọc - "x" lần 
+    -2 dòng đầu chỉ in "*" đại diện cho các cột và chỗ đó là trống
+    

@@ -1,0 +1,70 @@
+1,Vì đối tượng test không thể chạy Console và nhập dữ liệu đầu vào từ người dùng
+    =>Tách biệt phiên bản chạy chính và thử nghiệm
+    1.1, Tạo đối tượng dành cho thử nghiệm là riêng với xác thực ngay tại hàm tạo
+        +Làm sao tạo sự khác biệt giữa đối tượng chạy chính và đối tượng chạy thử nghiệm ngay trong hàm tạo đối tượng.
+            +Tách đối tượng đó với các thuộc tính trong hàm tạo riêng, dẫn sang con đường khác?
+            +Tạo hàm khởi chạy riêng?
+
+        +Sự khác biệt giữa đối tượng thử nghiệm và đối tượng chạy là gì?
+            1,Việc nhập liệu các dữ liệu từ người dùng là chỉ tồn tại trên phiên bản chạy ,còn đối với tượng thử nghiệm cần cổng nhập liệu riêng và xây dựng song song cùng với bản chính
+            2,
+        +Việc nhập dữ liệu sẽ được vẽ sẵn dữ liệu và nó sẽ tự chạy 
+            => Vạch sẵn các kịch bản cho thử nghiệm
+2,Xây dựng bộ kiểm tra thông số của đối tượng phục vụ cho hiển thị
+    1.1,Việc hiển thị được thực hiện dựa trên từng dòng một kiểm tra từng dòng
+        +Các việc cần thực hiện để đảm bảo hiển thị đúng
+            1.1.1,Kiểm tra tại cọc đó có chứa đĩa không, nó ảnh hưởng đến việc tạo MarginY
+                MarginY : lề trái , phải, hoặc cả 2 của cọc
+                Công thức tổng quát :
+                    LeftMargin = MaxLeftMargin - 0(nếu tại đó không có đĩa chỉ có thân cọ)
+                                               - x(độ rộng  của nửa phẩn đĩa bên phải) 
+                                                    x = ValueDisk
+                                               - x - y(nếu đó là cọ nằm giữa phía trái và phải đầu có cọ)
+                                                    y (độ rộng  của nửa phẩn đĩa bên trái) 
+                    (LeftMargin được tính từ phần lề hoặc sau phần thân cọc)
+            1.1.2,In từng cọc một sẽ xét tại index đó
+                +Tuần tự từng thành phần cần in:
+                    2.1 Lề trái = MaxMargin - tp Cọc
+                    2.2 Tp cọc(thân hoặc đĩa)
+                    2.3 Lề phải
+                        +Với lề trái = lề phải
+                +Rồi lặp lại với 2 cột còn lại
+            1.1.3,Tổng độ dài cọc sẽ = NumberDisk + 2
+                +Sẽ truy vấn cọc(tower) như thế nào?
+                    3.1,In 2 dòng cọc trống không có đĩa với việc
+                        MaxMargin * ' ' + * + MaxMargin * ' ' ; Với mỗi cọc
+3,Thay đổi cấu trúc thư mục của toàn bộ dự án 
+    =>Chuyển thành mô hình MVC (Model - View - Controller)
+    +Ứng dụng hiện tại quá lộm xộn, tập trung vào một file sẽ khó quản lý, tối ưu code
+    3.1,Xây dựng cây thư mục :
+        +Models(Các đối tượng chính):
+            -Tower
+            -Disk
+        +View(In nội dung bao gồm
+            +StartMenu
+                +Nhập số đĩa 
+                +Bắt đầu
+            +Hình biểu diễn
+                +Tách 3 cột là một thành phần (Biểu diễn theo từng cột)
+                +Gạch dưới tách 2 khu vực
+            +Nơi hành động người chơi
+                +Nhập hành động người chơi:
+                    +Lần nhập đầu:
+                        +Nếu là số thỏa mãn => Chọn tower 1
+                        +Nếu sai nhập lại đến khi đúng thì thôi TvT
+                    +Lần 2:
+                        +Tương tự lần 1 nhưng lần này nhập cho tower 2
+                    +Khi Thông tin đã ok Tải lại Hình biễu diễn và tiếp tục vòng lặp nhập giá trị tower
+                    +Cách sử dụng các phương án khác : Reset hoặc Quit
+                        +Trước mỗi lẫn đầu của việc hỏi tower xong hình sẽ hỏi người chơi sử dụng hành động tiếp theo là gì
+                +Nếu là ký tự đặc biệt như là 'r' => Reset,'a'=> Answer,'q' => Quit
+        +Controller(Xử lý các hoạt động):
+            -CreateGame:
+                +Khởi tạo game
+            -PlayFirst/SetUpDefault:
+                +Thiết lập các giá trị mặc định 
+            -TransferDisk
+            -Reset
+            -Bonus(Không cần thiết)
+                -Save
+                -OpenSaveLast

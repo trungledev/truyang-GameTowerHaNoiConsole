@@ -1,0 +1,286 @@
+using System.Text;
+
+namespace TowerOfHaNoi.Program;
+
+/*
+    Tháp Hà Nội
+    Yêu cầu bài tập:
+        Tháp Hà Nội là một bài toán toán học cơ bản để ví dụ về ý nghĩa của đệ quy.
+        Trong bài toán này, chúng ta có ba cột (A, B và C) và N đĩa.
+        Ban đầu, tất cả các đĩa được xếp chồng lên nhau theo giá trị giảm dần của đường kính, tức là đĩa nhỏ nhất được đặt trên cùng và chúng nằm trên thanh A.
+        Mục tiêu của bài toán đó là tìm cách di chuyển toàn bộ chồng đĩa sang một thanh khác (ở đây được coi là C) sử dụng thanh trung gian B, tuân theo quy tắc đơn giản sau:
+
+        Mỗi lần chỉ có thể di chuyển một đĩa.
+        Mỗi lần di chuyển sẽ bao gồm việc lấy đĩa trên cùng từ một trong các ngăn xếp và đặt nó lên trên một ngăn xếp khác, tức là chỉ có thể di chuyển một đĩa nếu nó là đĩa trên cùng trong một ngăn xếp.
+        Không được đặt đĩa to trên một đĩa nhỏ hơn.
+        Hãy viết chương trình sử dụng đệ quy in ra các bước dịch chuyển của các đĩa theo quy tắc sao cho ta có thể chuyển đĩa từ A sang C theo yêu cầu trên.
+
+    Một số quy định về lưu trữ và thứ tự:
+        Một cọc sẽ lưu giá trị theo tỷ lệ nghịch với index(chỉ mục) của phần tử
+        Vd: Với cột 1 mặc định chứa các đĩa: [disk3,disk2,disk1] với disk3 là ở đáy và disk1 ở trên đầu
+    Chú thích tiếng anh:
+        Disk : Đĩa
+        Tower : Cọc
+        LeftMargin : Lề trái
+    Giới hạn số đĩa trong khoảng lớn hơn [3  5]
+*/
+public enum EnvironmentTowerHaNoi
+{
+    Testing,
+    Development
+}
+public class TowerOrHaNoi
+{
+    //Khai báo hằng số 
+    private const int NUMBER_TOWER = 3;
+    private const int MAX_DISK = 5;
+    private const int MIN_DISK = 3;
+
+    //Khai báo các biến giá trị trong tháp 
+    //Giá trị của các đĩa
+    private int[] ValueDisks { get; set; }
+    //Khoảng khoảng cách lớn nhất của 1 cọc về 1 phía
+    private int MaxMarginY { get; set; }
+    //Lưu trữ toàn bộ đĩa 
+    private Disk[] Disks { get; set; }
+    //Lưu trữ 3 Cọc 
+    private Tower[] Towers { get; set; }
+    private int NumberDisk { get; set; }
+    public TowerOrHaNoi(EnvironmentTowerHaNoi environment, int numberDisk)
+    {
+        //Việc khởi tạo ứng dụng thực nghiệm được chuyển hướng tại đây
+        if (environment == EnvironmentTowerHaNoi.Testing)
+        {
+            SetNumberDiskTest(numberDisk);
+        }
+        //Khởi tạo mặc định các đối tượng : Disk, Tower, Value of Disk
+        ValueDisks = CreateValueDisk();
+        Disks = CreateDisks();
+        Towers = CreateTowersEmpty();
+        MaxMarginY = NumberDisk + 1;
+    }
+    public TowerOrHaNoi()
+    {
+        if (NumberDisk == 0)
+        {
+            GetNumberForNumberDisk();
+        }
+        //Khởi tạo mặc định các đối tượng : Disk, Tower, Value of Disk
+        ValueDisks = CreateValueDisk();
+        Disks = CreateDisks();
+        Towers = CreateTowersEmpty();
+        MaxMarginY = NumberDisk + 1;
+
+    }
+    public void RunForTest()
+    {
+        SetDefaultGame();
+    }
+    public void Run()
+    {
+        Console.WriteLine("Start game");
+        SetDefaultGame();
+        Display();
+        //Lấy dữ liệu từ người dùng ngay lần đầu chạy
+
+    }
+    private void Display()
+    {
+        //In viền trên 
+        PrintBorderHorizontal();
+        //In phần cọc trống với MaxMargin (lần) khoảng trắng ' '
+        int numberEmptyTower = 2;
+        for (int i = 0; i < numberEmptyTower; i++)
+        {
+            PrintLineTowerEmpty();
+        }
+        //In kho lưu trữ disk
+    }
+    private void PrintLineTowerEmpty()
+    {
+        string onelineEmptyDisk = NumberEmptyTowerString(NUMBER_TOWER);
+        Console.WriteLine(onelineEmptyDisk);
+    }
+    private string NumberEmptyTowerString(int numberEmptyTower)
+    {
+        string towerEmpty = GetStringOneEmptyTower();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < NUMBER_TOWER; i++)
+        {
+            stringBuilder.Append(towerEmpty);
+            if (i == NUMBER_TOWER - 1)
+                stringBuilder.Append("\n");
+        }
+        return stringBuilder.ToString();
+    }
+    private string GetStringOneEmptyTower()
+    {
+        string spaceLeftRight = new string(' ', MaxMarginY);
+        string bodyTower = "*";
+        string oneTower = new string(spaceLeftRight + bodyTower + spaceLeftRight);
+        return oneTower;
+    }
+
+    //In đường viền ngang 
+    private void PrintBorderHorizontal()
+    {
+        string border = new String('-', 6 * MaxMarginY + 3);
+        Console.WriteLine(border);
+    }
+
+    private void GetNumberForNumberDisk()
+    {
+        string messageGetNumber = "\nGet number disk: (Please press number 3 to 5)";
+        int input = GetNumberFromConsole(messageGetNumber);
+        while (!VerificationInput(input))
+        {
+            Console.WriteLine("\n" + input + " not validable press again ");
+            input = GetNumberFromConsole(messageGetNumber);
+        }
+        Console.WriteLine("Number disk is: " + input);
+        SetNumberDisk(input);
+    }
+
+    private bool VerificationInput(int input)
+    {
+        return input >= MIN_DISK && input <= MAX_DISK;
+    }
+
+    //Lấy các số từ người dùng qua Console.Read()
+    private int GetNumberFromConsole(string message)
+    {
+        Console.WriteLine(message);
+        var input = Console.ReadLine();
+        int number;
+        int.TryParse(input, out number);
+        return number;
+    }
+
+    private void SetNumberDisk(int numberDisk)
+    {
+        NumberDisk = numberDisk;
+    }
+    //Thiết lập mặc định Cọc : Tất cả Đĩa đều nằm trong cọc 1
+    private void SetDefaultGame()
+    {
+        int numberDisk = NumberDisk;
+        var towers = Towers;
+        if (towers[0] == null)
+            Console.WriteLine(" Tower Null?");
+        var disks = Disks;
+        int[] indexs = new int[numberDisk];
+
+        for (int i = numberDisk - 1; i >= 0; i--)
+        {
+            indexs[i] = i;
+        }
+
+        foreach (var disk in disks)
+        {
+            towers[0].Disks.Add(disk);
+        }
+
+        this.Towers = towers;
+    }
+    private IList<Disk> GetDisks(int[] indexs)
+    {
+        IList<Disk> disks = new List<Disk>();
+        foreach (var index in indexs)
+        {
+            disks.Add(this.Disks[index]);
+        }
+        return disks;
+    }
+    private Tower[] CreateTowersEmpty()
+    {
+        IList<Tower> towersList = new List<Tower>();
+        for (int i = 0; i < NUMBER_TOWER; i++)
+        {
+            towersList.Add(new Tower()
+            {
+                TowerId = i + 1
+            });
+        }
+        var towersArr = towersList.ToArray<Tower>();
+        return towersArr;
+    }
+    private Disk[] CreateDisks()
+    {
+        Disk[] diskArr;
+        IList<Disk> diskList = new List<Disk>();
+        for (int i = 1; i <= NumberDisk; i++)
+        {
+            diskList.Add(new Disk()
+            {
+                Value = ValueDisks[i - 1]
+            });
+        }
+        diskArr = diskList.ToArray<Disk>();
+        return diskArr;
+    }
+    private Tower GetTowerById(int id)
+    {
+        foreach (var tower in this.Towers)
+        {
+            if (tower.TowerId == id)
+                return tower;
+        }
+        return null!;
+
+    }
+    private Disk GetDiskByValue(int value)
+    {
+        foreach (var disk in Disks)
+        {
+            if (disk.Value == value)
+                return disk;
+        }
+        return null!;
+    }
+    private int[] CreateValueDisk()
+    {
+        IList<int> list = new List<int>();
+        for (var i = 1; i <= NumberDisk; i++)
+        {
+            list.Add(i);
+        }
+        return list.ToArray<int>();
+    }
+    private int CreateNumberSpace(int valueDisk)
+    {
+        return MaxMarginY - valueDisk;
+    }
+    //Lưu trữ đĩa trong mỗi cọc
+
+    //Bridge for test
+    internal void SetNumberDiskTest(int numberDisk)
+    {
+        NumberDisk = numberDisk;
+    }
+    internal Disk[] GetDiskTest()
+    {
+        return CreateDisks();
+    }
+    internal Tower[] GetTowersTest()
+    {
+        return Towers;
+    }
+    internal bool GetVerificationNumberTest(int number)
+    {
+        return VerificationInput(number);
+    }
+    internal int GetSpaceTowerTest()
+    {
+        return 0;
+        // return Towers[indexTower].Disks[indexDisk].Value;
+    }
+
+    internal string GetStringEmptyTowerTest()
+    {
+        return GetStringOneEmptyTower();
+    }
+    internal int GetMarginYTest()
+    {
+        return MaxMarginY;
+    }
+}
