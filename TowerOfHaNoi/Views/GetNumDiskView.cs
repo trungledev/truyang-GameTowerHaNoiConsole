@@ -2,10 +2,10 @@ namespace TowerOfHaNoi.Views;
 
 public class GetNumDiskView
 {
-    public static void StartGame()
+    public static Game StartGame()
     {
         ShowMessageAction();
-        InitializeGameConsole();
+        return InitializeGameConsole();
     }
     private static void ShowMessageAction()
     {
@@ -14,8 +14,9 @@ public class GetNumDiskView
         //string messageInputNumberDisk = "Please enter the number of disk from 3 to 5";
         Console.WriteLine(leftMargin + message);//+ messageInputNumberDisk);
     }
-    private static void InitializeGameConsole()
+    private static Game InitializeGameConsole()
     {
         InitializeGame initializeGame = new InitializeGame();
+        return initializeGame.CreateGame();
     }
 }

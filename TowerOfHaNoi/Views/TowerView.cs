@@ -15,4 +15,11 @@ public static class TowerView
     {
 
     }
+    private static string GetStringOneEmptyTower()
+    {
+        string spaceLeftRight = new string(' ', MaxMarginY);
+        string bodyTower = "*";
+        string oneTower = new string(spaceLeftRight + bodyTower + spaceLeftRight);
+        return oneTower;
+    }
 }

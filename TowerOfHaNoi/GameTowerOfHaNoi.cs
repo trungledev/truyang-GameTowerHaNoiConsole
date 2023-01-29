@@ -3,16 +3,18 @@ namespace TowerOfHaNoi;
 
 public class GameTowerHaNoi
 {
+    private Game _game = null!;
     //Noting setup default
     public GameTowerHaNoi(){}
     public void Run()
     {
-        StartGame();
+        HeadGame();
         AssestView.PrintBorderBottom(5);
+        BodyGame();
     }
 
 
-    private void StartGame()
+    private void HeadGame()
     {
         IntroGameView.ShowIntroGame();
         GetNumDiskView.StartGame();
