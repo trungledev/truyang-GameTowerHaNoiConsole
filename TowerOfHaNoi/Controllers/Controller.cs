@@ -28,7 +28,7 @@ public class Controller
                     var resultMethod = CallStaticMethodByString(viewName, nameMethodCurrent, parameters);
                     AssestView.PrintBorderBottom(8);
                     if (resultMethod == null)
-                        WriteLog.WriteLogToFile("Call static method: Failed");
+                        WriteLog.WriteLogToFile("Call static method return null");
                     return resultMethod;
                 }
                 else
@@ -56,17 +56,17 @@ public class Controller
             memberInfo = type.GetMethod(methodName);
             if (memberInfo != null)
             {
+                object? returnMethod;
                 try
                 {
-                    return memberInfo.Invoke(null, parameters);
-
+                    returnMethod = memberInfo.Invoke(null, parameters);
                 }
                 catch(Exception exception)
                 {
                     WriteLog.WriteLogToFile("Throw Exception: " + exception.Message + " in View() Controller" );
                     return null;
                 }
-                
+                return returnMethod;
             }
             else
             {
@@ -77,7 +77,7 @@ public class Controller
         {
             WriteLog.WriteLogToFile("Type " + viewName + " is not  found");
         }
-        return false;
+        return null;
     }
     private string ChangeGameControllerToView(string nameControllerCurrent)
     {

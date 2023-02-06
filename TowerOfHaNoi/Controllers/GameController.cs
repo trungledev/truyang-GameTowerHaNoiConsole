@@ -3,7 +3,8 @@ namespace TowerOfHaNoi.Controllers;
 public class GameController : Controller
 {
     private Game _game = new Game();
-    private int _numberDisk;
+    private TowerController _towerController = new TowerController();
+    private UserController _userController = new UserController();
     public void Start()
     {
         string nameGame = "\t Game Tower of HaNoi \n";
@@ -13,7 +14,17 @@ public class GameController : Controller
         View(new object[] { introGame });
 
         //Initialize Game
+        InitializeGameDefalut();
+        Body();
+    }
+    public void InitializeGameDefalut()
+    {
         InitializeGame initializeGame = new InitializeGame();
         _game = initializeGame.Create();
+    }
+    public void Body()
+    {
+        _towerController.ShowAllTower(_game);
+        _userController.ActionUserFirst();
     }
 }

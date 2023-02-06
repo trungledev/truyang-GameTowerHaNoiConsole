@@ -1,6 +1,6 @@
 namespace TowerOfHaNoi.Views;
 
-public class UserView
+public static class UserView
 {
     public static string? GetNumberConsole(string message)
     {
@@ -12,5 +12,17 @@ public class UserView
     {
         string result = "Result: " + message;
         Console.WriteLine(result);
+    }
+    public static string? ActionUserFirst(string message)
+    {
+        Console.WriteLine(message);
+        var input = Console.ReadLine();
+        return input;
+    }
+    public static string? SelectSecondTower(string message)
+    {
+        Console.WriteLine(message);
+        var input = Console.ReadLine();
+        return input;
     }
 }

@@ -7,19 +7,8 @@ namespace TowerOfHaNoi.Views;
 */
 public static class TowerView
 {
-    public static void ShowAllTower()
+    public static void ShowAllTower(string content)
     {
-        
+        Console.WriteLine(content);
     }
-    private static void ShowOneTower()
-    {
-
-    }
-    // private static string GetStringOneEmptyTower()
-    // {
-    //    string spaceLeftRight = new string(' ', MaxMarginY);
-    //    string bodyTower = "*";
-    //    string oneTower = new string(spaceLeftRight + bodyTower + spaceLeftRight);
-    //    return oneTower;
-    // }
 }

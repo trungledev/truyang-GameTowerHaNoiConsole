@@ -30,12 +30,12 @@ public class InitializeGame
         int numberDisk = 0;
         numberDisk = _userController.GetNumberDiskValid();
 
-        InitializePropertyGame(numberDisk);
+        InitializePropertyGame(_game, numberDisk);
     }
-    private void InitializePropertyGame(int numberDisk)
+    private void InitializePropertyGame(Game game, int numberDisk)
     {
-        bool sucessInitTower = InitializeTower(_game, numberDisk);
-        bool successInitDisk = InitializeDisk(_game, numberDisk);
+        bool sucessInitTower = InitializeTower(game, numberDisk);
+        bool successInitDisk = InitializeDisk(game, numberDisk);
         if (!sucessInitTower && !successInitDisk)
         {
             WriteLog.WriteLogToFile("Init failed");
@@ -51,6 +51,7 @@ public class InitializeGame
                 Value = i + 1
             };
         }
+        game.Disks = disks;
         if (disks.Count() == numberDisk && disks[0].Value == 1)
             return true;
         return false;
@@ -61,16 +62,54 @@ public class InitializeGame
         Tower[] towers = new Tower[NUMBER_TOWER];
         for (int i = 0; i < NUMBER_TOWER; i++)
         {
+            if (i == 0)
+            {
+                towers[0] = new Tower()
+                {
+                    TowerId = 1,
+                    Disks = SetFullDisks(numberDisk)
+                };
+                continue;
+            }
             towers[i] = new Tower()
             {
                 TowerId = i + 1,
-                Disks = new Disk[numberDisk]
+                Disks = SetDisksZeroValue(numberDisk)
             };
         }
+
         game.Towers = towers;
         if (game.Towers.Count() != NUMBER_TOWER)
             return false;
         return true;
+    }
+
+    private Disk[] SetFullDisks(int numberDisk)
+    {
+        Disk[] disks = new Disk[numberDisk + 2];
+        for (int i = 0; i < numberDisk + 2; i++)
+        {
+            disks[i] = new Disk()
+            {
+                Value = (numberDisk - i) > 0 ? numberDisk - i : 0
+            };
+        }
+        return disks;
+    }
+
+    private Disk[] SetDisksZeroValue(int numberDiks)
+    {
+        int numberDiskStore = numberDiks + 2;
+        Disk[] disks = new Disk[numberDiskStore];
+        for (int i = 0; i < numberDiskStore; i++)
+        {
+            disks[i] = new Disk()
+            {
+                Value = 0
+            };
+        }
+
+        return disks;
     }
     private bool VerificationNumberDisk(int input)
     {
