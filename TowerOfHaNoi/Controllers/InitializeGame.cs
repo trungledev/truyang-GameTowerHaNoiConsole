@@ -52,7 +52,7 @@ public class InitializeGame
             };
         }
         game.Disks = disks;
-        if (disks.Count() == numberDisk && disks[0].Value == 1)
+        if (disks.Length == numberDisk && disks[0].Value == 1)
             return true;
         return false;
     }
@@ -79,7 +79,7 @@ public class InitializeGame
         }
 
         game.Towers = towers;
-        if (game.Towers.Count() != NUMBER_TOWER)
+        if (game.Towers.Length != NUMBER_TOWER)
             return false;
         return true;
     }

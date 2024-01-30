@@ -40,7 +40,7 @@
         +Models(Các đối tượng chính):
             -Tower
             -Disk
-        +View(In nội dung bao gồm
+        +View In nội dung bao gồm
             +StartMenu
                 +Nhập số đĩa 
                 +Bắt đầu
@@ -69,6 +69,7 @@
                 -Save
                 -OpenSaveLast
 4,Thay đổi cấu trúc lần 2 vấn đề sinh ra khi việc xây dựng các thành phần lẻ 
-    +Xây dựng controller trước và độ lập sinh ra sự thiếu liên kết giữa View và Controller
+    +Xây dựng controller trước và độc lập sinh ra sự thiếu liên kết giữa View và Controller
     => Xây dựng song song 2 thành phần: View được trả về từ Controller
         Tạo sự liên kết chặt chẽ giữa 2 tp qua lại thông tin với nhau
+        

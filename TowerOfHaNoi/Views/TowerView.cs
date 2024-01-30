@@ -11,4 +11,8 @@ public static class TowerView
     {
         Console.WriteLine(content);
     }
+    public static void ChangeDisk(string content)
+    {
+        
+    }
 }

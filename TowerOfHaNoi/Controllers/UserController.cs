@@ -37,53 +37,65 @@ public class UserController : Controller
     {
         View(new object[] { result });
     }
-    public void ActionUserFirst()
+    public DataAction ActionUserFirst()
     {
         string actionMessage = "Action:\n";
         string requestMessage = " Select one tower or other action with character:\n  1,2,3 Or( r / R : Reset, q / R : Quit) ";
         var inputObject = View(new object[] { actionMessage + requestMessage });
         string? inputString = inputObject == null ? string.Empty : inputObject.ToString();
-
-        VerifacationInputAction(inputString);
+        return VerifacationInputAction(inputString);
     }
-    public void SelectSecondTower(int numberSecondTower)
+    public int SelectSecondTower()
     {
         string messageSelectSecondTower = "Select next tower:";
-        View(new object[] {messageSelectSecondTower});
+        var inputObject = View(new object[] { messageSelectSecondTower });
+        string? inputString = inputObject == null ? string.Empty : inputObject.ToString();
+        int numberSecond;
+        int.TryParse(inputString, out numberSecond);
+        if (!VerificationNumberTower(numberSecond))
+        {
+            SelectSecondTower();
+        }
+        return numberSecond;
     }
-    private void VerifacationInputAction(string? input)
+    private DataAction VerifacationInputAction(string? input)
     {
+        DataAction dataAction = new DataAction();
         if (input == null || input == string.Empty)
         {
             //Call again InputAction
+            ResultAction("Press anything!");
             ActionUserFirst();
         }
-        else if (input == "r" || input == "R")
+        int inputNumber;
+        int.TryParse(input, out inputNumber);
+        // if (!VerificationFirstTower(inputNumber))
+        // {
+        //     ResultAction("Number Tower not found");
+        //     ActionUserFirst();
+        // }
+        // else
+        // {
+        //     dataAction.FirstTower = inputNumber;
+        //     dataAction.SecondTower = SelectSecondTower();
+        // }
+        input = input!.ToUpper();
+        switch (input)
         {
-            //Reset tower
-            
+            case "R":
+                //Reset tower
+                dataAction.TypeActionUser = TypeAction.RESET_GAME;
+                break;
+            case "Q":
+                //Quit game
+                dataAction.TypeActionUser = TypeAction.QUIT_GAME;
+                break;
         }
-        else if (input == "q" || input == "Q")
-        {
-
-        }
-        else
-        {
-            int inputNumber;
-            int.TryParse(input, out inputNumber);
-            if (!VerificationNumberTower(inputNumber))
-            {
-                ResultAction("Number Tower not found");
-                ActionUserFirst();
-            }
-            else
-                SelectSecondTower(inputNumber);
-        }
-
+        return dataAction;
     }
-
+   
     private bool VerificationNumberTower(int inputNumberTower)
     {
-        return inputNumberTower > 0 && inputNumberTower < 4;
+        return inputNumberTower > 0 && inputNumberTower < 3;
     }
 }
